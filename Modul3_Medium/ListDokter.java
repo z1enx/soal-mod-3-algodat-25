@@ -15,29 +15,6 @@ public class ListDokter {
         }
     }
 
-    public void display() {
-        Dokter start = head;
-        if (start == null) {
-            System.out.println("Tidak ada data");
-            return;
-        }
-
-        // Header tabel
-        System.out.println("---------------------------------------------------------------");
-        System.out.println("ID\tNama Dokter\t\tSpesialis\tPengalaman");
-        System.out.println("---------------------------------------------------------------");
-
-        // Isi tabel
-        for (; start != null; start = start.next) {
-            System.out.println(start.id_dokter + "\t" +
-                    start.nama_dokter + "\t" +
-                    start.spesialis + "\t" +
-                    start.pengalaman);
-        }
-
-        System.out.println("---------------------------------------------------------------");
-    }
-
     public void displayDokterDanPasien() {
         Dokter current = head;
         
@@ -47,11 +24,12 @@ public class ListDokter {
         }
         
         while (current != null) {
-            System.out.println("---------------------------------------------------------------");
+            System.out.println("----------------------------------------------------------");
+            System.out.println("ID Dokter: " + current.id_dokter);
             System.out.println("Dokter: " + current.nama_dokter);
             System.out.println("Spesialis: " + current.spesialis);
             System.out.println("Pengalaman: " + current.pengalaman + " tahun");
-            System.out.println("---------------------------------------------------------------");
+            System.out.println("----------------------------------------------------------");
             System.out.println("Daftar Pasien:");
             System.out.println();
             
@@ -59,7 +37,7 @@ public class ListDokter {
                 current.pasien.displayPasien();
             } else {
                 System.out.println("Tidak ada pasien");
-                System.out.println("---------------------------------------------------------------");
+                System.out.println("----------------------------------------------------------");
             }
             
             System.out.println();
@@ -67,19 +45,31 @@ public class ListDokter {
         }
     }
 
-    // Method untuk swap node pasien (bukan data)
+    public void displayPasien(String nama_dokter) {
+        Dokter dokter = findDokterByNama(nama_dokter);
+        
+        if (dokter == null) {
+            System.out.println("Dokter dengan nama " + nama_dokter + " tidak ditemukan");
+            return;
+        }
+
+        if (dokter.pasien == null || dokter.pasien.head == null) {
+            System.out.println("Tidak ada pasien untuk dokter " + dokter.nama_dokter);
+            return;
+        }
+
+        dokter.pasien.displayPasien();
+    }
+
     private void swapNodePasien(ListPasien listPasien, Pasien a, Pasien b) {
         if (a == b) return;
 
-        // Simpan prev dan next dari a dan b
         Pasien prevA = a.prev;
         Pasien nextA = a.next;
         Pasien prevB = b.prev;
         Pasien nextB = b.next;
 
-        // Jika a dan b bersebelahan
         if (a.next == b) {
-            // a -> b menjadi b -> a
             a.next = nextB;
             a.prev = b;
             b.next = a;
@@ -91,7 +81,6 @@ public class ListDokter {
             if (nextB != null) nextB.prev = a;
             else listPasien.tail = a;
         } else if (b.next == a) {
-            // b -> a menjadi a -> b
             b.next = nextA;
             b.prev = a;
             a.next = b;
@@ -103,7 +92,6 @@ public class ListDokter {
             if (nextA != null) nextA.prev = b;
             else listPasien.tail = b;
         } else {
-            // a dan b tidak bersebelahan
             a.prev = prevB;
             a.next = nextB;
             b.prev = prevA;
@@ -122,11 +110,9 @@ public class ListDokter {
             else listPasien.tail = a;
         }
 
-        // Update ID berdasarkan posisi baru
         updatePasienIds(listPasien);
     }
 
-    // Method untuk update ID pasien berdasarkan urutan node
     private void updatePasienIds(ListPasien listPasien) {
         Pasien current = listPasien.head;
         int id = 1;
@@ -136,8 +122,10 @@ public class ListDokter {
         }
     }
 
-    // 1. Bubble Sort - Sorting pasien berdasarkan sistolik (swap by node)
-    public void bubbleSortPasienBySistolik(String nama_dokter, String order) {
+    // ==================== SELECTION SORT ====================
+    
+    // 1. Selection Sort - Pasien by Nama (Ascending)
+    public void selectionSortPasienByNama(String nama_dokter) {
         Dokter dokter = findDokterByNama(nama_dokter);
         
         if (dokter == null) {
@@ -150,40 +138,72 @@ public class ListDokter {
             return;
         }
 
-        boolean swapped;
-        do {
-            Pasien current = dokter.pasien.head;
-            swapped = false;
-
-            while (current != null && current.next != null) {
-                boolean shouldSwap = false;
-                
-                if (order.equalsIgnoreCase("asc")) {
-                    if (current.sistolik > current.next.sistolik) {
-                        shouldSwap = true;
-                    }
-                } else if (order.equalsIgnoreCase("desc")) {
-                    if (current.sistolik < current.next.sistolik) {
-                        shouldSwap = true;
-                    }
+        Pasien current = dokter.pasien.head;
+        
+        while (current != null) {
+            Pasien min = current;
+            Pasien temp = current.next;
+            
+            while (temp != null) {
+                if (temp.nama_pasien.compareTo(min.nama_pasien) < 0) {
+                    min = temp;
                 }
-
-                if (shouldSwap) {
-                    Pasien next = current.next;
-                    swapNodePasien(dokter.pasien, current, next);
-                    swapped = true;
-                    current = next; // Lanjut ke node yang sudah di-swap
-                } else {
-                    current = current.next;
-                }
+                temp = temp.next;
             }
-        } while (swapped);
+            
+            if (min != current) {
+                swapNodePasien(dokter.pasien, current, min);
+                current = min.next;
+            } else {
+                current = current.next;
+            }
+        }
 
-        System.out.println("Pasien dokter " + dokter.nama_dokter + " berhasil diurutkan berdasarkan sistolik (" + order + ")");
+        System.out.println("Pasien dokter " + dokter.nama_dokter + " berhasil diurutkan berdasarkan nama (ascending) - Selection Sort");
     }
 
-    // 2. Insertion Sort - Sorting pasien berdasarkan nama (tanpa swap id_pasien)
-    public void insertionSortPasienByNama(String nama_dokter, String order) {
+    // 2. Selection Sort - Pasien by Sistolik (Ascending)
+    public void selectionSortPasienBySistolik(String nama_dokter) {
+        Dokter dokter = findDokterByNama(nama_dokter);
+        
+        if (dokter == null) {
+            System.out.println("Dokter dengan nama " + nama_dokter + " tidak ditemukan");
+            return;
+        }
+
+        if (dokter.pasien == null || dokter.pasien.head == null) {
+            System.out.println("Tidak ada pasien untuk dokter ini");
+            return;
+        }
+
+        Pasien current = dokter.pasien.head;
+        
+        while (current != null) {
+            Pasien min = current;
+            Pasien temp = current.next;
+            
+            while (temp != null) {
+                if (temp.sistolik < min.sistolik) {
+                    min = temp;
+                }
+                temp = temp.next;
+            }
+            
+            if (min != current) {
+                swapNodePasien(dokter.pasien, current, min);
+                current = min.next;
+            } else {
+                current = current.next;
+            }
+        }
+
+        System.out.println("Pasien dokter " + dokter.nama_dokter + " berhasil diurutkan berdasarkan sistolik (ascending) - Selection Sort");
+    }
+
+    // ==================== INSERTION SORT ====================
+
+    // 3. Insertion Sort - Pasien by Nama (Ascending)
+    public void insertionSortPasienByNama(String nama_dokter) {
         Dokter dokter = findDokterByNama(nama_dokter);
         
         if (dokter == null) {
@@ -202,11 +222,7 @@ public class ListDokter {
         while (current != null) {
             Pasien next = current.next;
             
-            // Insert current ke sorted list
-            if (sorted == null || 
-                (order.equalsIgnoreCase("asc") && current.nama_pasien.compareTo(sorted.nama_pasien) < 0) ||
-                (order.equalsIgnoreCase("desc") && current.nama_pasien.compareTo(sorted.nama_pasien) > 0)) {
-                
+            if (sorted == null || current.nama_pasien.compareTo(sorted.nama_pasien) < 0) {
                 current.next = sorted;
                 current.prev = null;
                 if (sorted != null) {
@@ -215,9 +231,7 @@ public class ListDokter {
                 sorted = current;
             } else {
                 Pasien temp = sorted;
-                while (temp.next != null && 
-                       ((order.equalsIgnoreCase("asc") && temp.next.nama_pasien.compareTo(current.nama_pasien) < 0) ||
-                        (order.equalsIgnoreCase("desc") && temp.next.nama_pasien.compareTo(current.nama_pasien) > 0))) {
+                while (temp.next != null && temp.next.nama_pasien.compareTo(current.nama_pasien) < 0) {
                     temp = temp.next;
                 }
                 
@@ -232,7 +246,6 @@ public class ListDokter {
             current = next;
         }
 
-        // Update head dan tail
         dokter.pasien.head = sorted;
         Pasien temp = sorted;
         while (temp.next != null) {
@@ -240,14 +253,109 @@ public class ListDokter {
         }
         dokter.pasien.tail = temp;
 
-        // Update ID berdasarkan urutan node baru
         updatePasienIds(dokter.pasien);
 
-        System.out.println("Pasien dokter " + dokter.nama_dokter + " berhasil diurutkan berdasarkan nama (" + order + ")");
+        System.out.println("Pasien dokter " + dokter.nama_dokter + " berhasil diurutkan berdasarkan nama (ascending) - Insertion Sort");
     }
 
-    // 3. Linear Search - Mencari pasien berdasarkan nama di dokter tertentu
-    public void linearSearchPasien(String nama_dokter, String nama_pasien) {
+    // 4. Insertion Sort - Pasien by Sistolik (Ascending)
+    public void insertionSortPasienBySistolik(String nama_dokter) {
+        Dokter dokter = findDokterByNama(nama_dokter);
+        
+        if (dokter == null) {
+            System.out.println("Dokter dengan nama " + nama_dokter + " tidak ditemukan");
+            return;
+        }
+
+        if (dokter.pasien == null || dokter.pasien.head == null) {
+            System.out.println("Tidak ada pasien untuk dokter ini");
+            return;
+        }
+
+        Pasien sorted = null;
+        Pasien current = dokter.pasien.head;
+
+        while (current != null) {
+            Pasien next = current.next;
+            
+            if (sorted == null || current.sistolik < sorted.sistolik) {
+                current.next = sorted;
+                current.prev = null;
+                if (sorted != null) {
+                    sorted.prev = current;
+                }
+                sorted = current;
+            } else {
+                Pasien temp = sorted;
+                while (temp.next != null && temp.next.sistolik < current.sistolik) {
+                    temp = temp.next;
+                }
+                
+                current.next = temp.next;
+                current.prev = temp;
+                if (temp.next != null) {
+                    temp.next.prev = current;
+                }
+                temp.next = current;
+            }
+            
+            current = next;
+        }
+
+        dokter.pasien.head = sorted;
+        Pasien temp = sorted;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+        dokter.pasien.tail = temp;
+
+        updatePasienIds(dokter.pasien);
+
+        System.out.println("Pasien dokter " + dokter.nama_dokter + " berhasil diurutkan berdasarkan sistolik (ascending) - Insertion Sort");
+    }
+
+    // ==================== LINEAR SEARCH ====================
+
+    // 5. Linear Search - Pasien by Umur
+    public void linearSearchPasienByUmur(String nama_dokter, int umur) {
+        Dokter dokter = findDokterByNama(nama_dokter);
+        
+        if (dokter == null) {
+            System.out.println("Dokter dengan nama " + nama_dokter + " tidak ditemukan");
+            return;
+        }
+
+        if (dokter.pasien == null || dokter.pasien.head == null) {
+            System.out.println("Tidak ada pasien untuk dokter ini");
+            return;
+        }
+
+        Pasien current = dokter.pasien.head;
+        boolean found = false;
+        
+        while (current != null) {
+            if (current.umur == umur) {
+                if (!found) {
+                    System.out.println("Pasien ditemukan pada dokter " + dokter.nama_dokter);
+                    found = true;
+                }
+                System.out.println("ID: " + current.id_pasien);
+                System.out.println("Nama: " + current.nama_pasien);
+                System.out.println("Umur: " + current.umur);
+                System.out.println("Sistolik: " + current.sistolik);
+                System.out.println("Diastolik: " + current.diastolik);
+                System.out.println();
+            }
+            current = current.next;
+        }
+
+        if (!found) {
+            System.out.println("Pasien dengan umur " + umur + " tidak ditemukan pada dokter " + dokter.nama_dokter);
+        }
+    }
+
+    // 6. Linear Search - Pasien by Nama
+    public void linearSearchPasienByNama(String nama_dokter, String nama_pasien) {
         Dokter dokter = findDokterByNama(nama_dokter);
         
         if (dokter == null) {
@@ -277,7 +385,9 @@ public class ListDokter {
         System.out.println("Pasien dengan nama '" + nama_pasien + "' tidak ditemukan pada dokter " + dokter.nama_dokter);
     }
 
-    // 4. Binary Search - Mencari pasien berdasarkan umur di dokter tertentu
+    // ==================== BINARY SEARCH ====================
+
+    // 7. Binary Search - Pasien by Umur
     public void binarySearchPasienByUmur(String nama_dokter, int umur) {
         Dokter dokter = findDokterByNama(nama_dokter);
         
@@ -291,10 +401,8 @@ public class ListDokter {
             return;
         }
 
-        // Sort dulu berdasarkan umur menggunakan bubble sort
-        sortPasienByUmur(dokter.pasien, "asc");
+        sortPasienByUmur(dokter.pasien);
 
-        // Binary search
         Pasien left = dokter.pasien.head;
         Pasien right = null;
 
@@ -331,7 +439,61 @@ public class ListDokter {
         System.out.println("Pasien dengan umur " + umur + " tidak ditemukan pada dokter " + dokter.nama_dokter);
     }
 
-    // Helper method untuk mencari middle node (untuk binary search)
+    // 8. Binary Search - Pasien by Nama
+    public void binarySearchPasienByNama(String nama_dokter, String nama_pasien) {
+        Dokter dokter = findDokterByNama(nama_dokter);
+        
+        if (dokter == null) {
+            System.out.println("Dokter dengan nama " + nama_dokter + " tidak ditemukan");
+            return;
+        }
+
+        if (dokter.pasien == null || dokter.pasien.head == null) {
+            System.out.println("Tidak ada pasien untuk dokter ini");
+            return;
+        }
+
+        sortPasienByNamaForBinary(dokter.pasien);
+
+        Pasien left = dokter.pasien.head;
+        Pasien right = null;
+
+        do {
+            Pasien middle = searchMiddlePasien(left, right);
+
+            if (middle == null) break;
+
+            int comparison = middle.nama_pasien.compareToIgnoreCase(nama_pasien);
+
+            if (comparison == 0) {
+                System.out.println("Pasien ditemukan pada dokter " + dokter.nama_dokter);
+                System.out.println("ID: " + middle.id_pasien);
+                System.out.println("Nama: " + middle.nama_pasien);
+                System.out.println("Umur: " + middle.umur);
+                System.out.println("Sistolik: " + middle.sistolik);
+                System.out.println("Diastolik: " + middle.diastolik);
+                return;
+            } else if (comparison < 0) {
+                left = middle.next;
+            } else {
+                right = middle;
+            }
+        } while (right == null || right != left);
+
+        if (left != null && left.nama_pasien.equalsIgnoreCase(nama_pasien)) {
+            System.out.println("Pasien ditemukan pada dokter " + dokter.nama_dokter);
+            System.out.println("ID: " + left.id_pasien);
+            System.out.println("Nama: " + left.nama_pasien);
+            System.out.println("Umur: " + left.umur);
+            System.out.println("Sistolik: " + left.sistolik);
+            System.out.println("Diastolik: " + left.diastolik);
+            return;
+        }
+
+        System.out.println("Pasien dengan nama '" + nama_pasien + "' tidak ditemukan pada dokter " + dokter.nama_dokter);
+    }
+
+
     private Pasien searchMiddlePasien(Pasien left, Pasien right) {
         if (left == null) {
             return null;
@@ -346,39 +508,52 @@ public class ListDokter {
         return slow;
     }
 
-    // Helper method untuk sorting pasien berdasarkan umur (untuk binary search)
-    private void sortPasienByUmur(ListPasien listPasien, String order) {
-        boolean swapped;
-        do {
-            Pasien current = listPasien.head;
-            swapped = false;
-
-            while (current != null && current.next != null) {
-                boolean shouldSwap = false;
-                
-                if (order.equalsIgnoreCase("asc")) {
-                    if (current.umur > current.next.umur) {
-                        shouldSwap = true;
-                    }
-                } else {
-                    if (current.umur < current.next.umur) {
-                        shouldSwap = true;
-                    }
+    private void sortPasienByUmur(ListPasien listPasien) {
+        Pasien current = listPasien.head;
+        
+        while (current != null) {
+            Pasien min = current;
+            Pasien temp = current.next;
+            
+            while (temp != null) {
+                if (temp.umur < min.umur) {
+                    min = temp;
                 }
-
-                if (shouldSwap) {
-                    Pasien next = current.next;
-                    swapNodePasien(listPasien, current, next);
-                    swapped = true;
-                    current = next;
-                } else {
-                    current = current.next;
-                }
+                temp = temp.next;
             }
-        } while (swapped);
+            
+            if (min != current) {
+                swapNodePasien(listPasien, current, min);
+                current = min.next;
+            } else {
+                current = current.next;
+            }
+        }
     }
 
-    // Helper method untuk mencari dokter berdasarkan NAMA
+    private void sortPasienByNamaForBinary(ListPasien listPasien) {
+        Pasien current = listPasien.head;
+        
+        while (current != null) {
+            Pasien min = current;
+            Pasien temp = current.next;
+            
+            while (temp != null) {
+                if (temp.nama_pasien.compareTo(min.nama_pasien) < 0) {
+                    min = temp;
+                }
+                temp = temp.next;
+            }
+            
+            if (min != current) {
+                swapNodePasien(listPasien, current, min);
+                current = min.next;
+            } else {
+                current = current.next;
+            }
+        }
+    }
+
     private Dokter findDokterByNama(String nama_dokter) {
         Dokter current = head;
         while (current != null) {
