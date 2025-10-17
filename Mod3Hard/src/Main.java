@@ -124,7 +124,28 @@ public class Main {
 
         nbaLeague.printTeams();
         nbaLeague.quickSort();
+        System.out.println();
+        System.out.println("Diurutkan Berdasarkan Jumlah Kemenangan");
         nbaLeague.printTeams();
+
+        nbaLeague.printAllPlayers();
+        System.out.println("Diurutkan Berdasarkan PPG (Points Per Game)");
+        TeamNode current = nbaLeague.head;
+        while(current != null){
+            current.players.mergeSort();
+            current = current.next;
+        }
+        nbaLeague.printAllPlayers();
+
+        PlayerList allPlayers = nbaLeague.getAllPlayers();
+        allPlayers.printPlayers();
+        System.out.println();
+        System.out.println("Semua Pemain Diurutkan Berdasarkan PPG (Points Per Game)");
+        allPlayers.mergeSort();
+        allPlayers.printPlayers();
+        System.out.println("Mencari Kandidat MVP berdasarkan PPG >= 25");
+        PlayerList mvpCandidates = allPlayers.findMVPCandidate(25);
+        mvpCandidates.printPlayers();        
 
 
 
@@ -250,25 +271,7 @@ public class Main {
         nbaLeague.tail.players.addPlayer("Santi Aldama", 7, 1055, 165, 597, 151);
         nbaLeague.tail.players.addPlayer("John Konchar", 46, 1289, 381, 1178, 246);
 
-        // System.out.print("MergeSort: ");
-        // long startTime = System.nanoTime();
-        // TeamNode current = nbaLeague.head;
-        // while (current.next != null){
-        // current.players.mergeSort("ppg");
-        // current = current.next;
-        // }
-        // long elapsedTime = System.nanoTime() - startTime;
-        // System.out.println("Elapsed Time is " + (elapsedTime / 1000000.0)+"msec");
-
-        // System.out.print("QuickSort: ");
-        // long startTime2 = System.nanoTime();
-        // TeamNode current2 = nbaLeague.head;
-        // while (current2.next != null){
-        // current2.players.mergeSort("ppg");
-        // current2 = current2.next;
-        // }
-        // long elapsedTime2 = System.nanoTime() - startTime2;
-        // System.out.println("Elapsed Time is " + (elapsedTime2 / 1000000.0)+"msec");
+        // 20 Tim
 
         nbaLeague.addTeam("Indiana Pacers", 82, 47, 35, 10110, 3395, 2517);
         nbaLeague.tail.players.addPlayer("Tyrese Haliburton", 0, 4768, 2419, 1059, 281);
@@ -390,26 +393,14 @@ public class Main {
         nbaLeague.tail.players.addPlayer("Talen Horton-Tucker", 5, 2331, 638, 770, 230);
         nbaLeague.tail.players.addPlayer("Luka Samanic", 19, 521, 80, 312, 80);
 
-        // System.out.print("MergeSort: ");
-        // long startTime = System.nanoTime();
-        // TeamNode current = nbaLeague.head;
-        // while (current.next != null) {
-        //     current.players.mergeSort("ppg");
-        //     current = current.next;
-        // }
-        // long elapsedTime = System.nanoTime() - startTime;
-        // System.out.println("Elapsed Time is " + (elapsedTime / 1000000.0) + "msec");
+        // 30 Tim
 
-        // System.out.print("QuickSort: ");
-        // long startTime2 = System.nanoTime();
-        // TeamNode current2 = nbaLeague.head;
-        // while (current2.next != null) {
-        //     current2.players.quickSort("ppg");
-        //     current2 = current2.next;
-        // }
-        // long elapsedTime2 = System.nanoTime() - startTime2;
-        // System.out.println("Elapsed Time is " + (elapsedTime2 / 1000000.0) + "msec");
 
-        // nbaLeague.printTeams();
+
+
+
+
+        
+
     }
 }

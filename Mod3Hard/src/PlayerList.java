@@ -96,39 +96,48 @@ public class PlayerList {
         return slow;
     }
 
-    public PlayerList findMVPCandidate(double minPPG) {
+public PlayerList findMVPCandidate(double minPPG) {
         PlayerList results = new PlayerList();
         if (head == null) {
             return results;
         }
 
-        PlayerNode firstMatch = binarySearch(head, tail, minPPG);
-
-        if (firstMatch != null) {
-            PlayerNode current = firstMatch;
+        PlayerNode aMatch = binarySearch(head, tail, minPPG); 
+        if (aMatch != null) {
+            PlayerNode current = aMatch;
             while (current != null && current.getPPG() >= minPPG) {
+                results.addPlayer(current.stats.name, current.stats.jerseyNumber, current.stats.totalPoints, 
+                                  current.stats.totalAssists, current.stats.totalRebounds, current.stats.gamesPlayed);
+                current = current.prev;
+            }
+            current = aMatch.next;
+             while (current != null && current.getPPG() >= minPPG) {
                 results.addPlayer(current.stats.name, current.stats.jerseyNumber, current.stats.totalPoints, 
                                   current.stats.totalAssists, current.stats.totalRebounds, current.stats.gamesPlayed);
                 current = current.next;
             }
+
+        } else {
+             System.out.println("Tidak ada pemain yang memenuhi kriteria PPG >= " + minPPG);
         }
-        
+        results.mergeSort();
         return results;
     }
+
     private PlayerNode binarySearch(PlayerNode low, PlayerNode high, double minPPG) {
-        PlayerNode result = null;
-        while (low != null && high != null && low != high.next && low.prev != high) {
+         while (low != null && high != null && low != high.next && low.prev != high) {
             PlayerNode mid = getMiddle(low, high);
             if (mid == null) break;
 
-            // Compare getPPG() directly.
             if (mid.getPPG() >= minPPG) {
-                result = mid;
-                high = mid.prev;
+                return mid;
             } else {
-                low = mid.next;
+                high = mid.prev;
             }
         }
-        return result;
+        if (low != null && low.getPPG() >= minPPG) {
+            return low;
+        }
+        return null;
     }
 }

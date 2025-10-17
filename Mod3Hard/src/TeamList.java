@@ -60,6 +60,31 @@ public class TeamList {
         }
     }
 
+    public PlayerList getAllPlayers() {
+        PlayerList allPlayers = new PlayerList();
+        
+        TeamNode currentTeam = this.head;
+
+        while (currentTeam != null) {
+            PlayerNode currentPlayer = currentTeam.players.head;
+
+            while (currentPlayer != null) {
+                allPlayers.addPlayer(
+                    currentPlayer.stats.name,
+                    currentPlayer.stats.jerseyNumber,
+                    currentPlayer.stats.totalPoints,
+                    currentPlayer.stats.totalAssists,
+                    currentPlayer.stats.totalRebounds,
+                    currentPlayer.stats.gamesPlayed
+                );
+                currentPlayer = currentPlayer.next;
+            }
+            currentTeam = currentTeam.next;
+        }
+        
+    return allPlayers;
+    }
+
     public void quickSort() {
         head = quickSortRec(head, tail);
         
