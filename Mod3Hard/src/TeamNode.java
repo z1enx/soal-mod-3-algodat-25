@@ -17,7 +17,7 @@ public class TeamNode {
         } else if (data.totalPoints == 0) {
             return 0;
         } else {
-            return (double) data.totalPoints / data.gamesPlayed;
+            return Math.round(((double) data.totalPoints / data.gamesPlayed) * 10) / 10.0;
         }
     }
 
@@ -27,7 +27,7 @@ public class TeamNode {
         } else if (data.totalAssists == 0) {
             return 0;
         } else {
-            return (double) data.totalAssists / data.gamesPlayed;
+            return Math.round(((double) data.totalAssists / data.gamesPlayed) * 10) / 10.0;
         }
     }
 
@@ -37,7 +37,7 @@ public class TeamNode {
         } else if (data.totalRebounds == 0) {
             return 0;
         } else {
-            return (double) data.totalRebounds / data.gamesPlayed;
+            return Math.round(((double) data.totalRebounds / data.gamesPlayed) * 10) / 10.0;
         }
     }
 }

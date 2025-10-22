@@ -38,6 +38,69 @@ public class Main {
         nbaLeague.tail.players.addPlayer("Jaxson Hayes", 11, 2399, 213, 1297, 319);
         nbaLeague.tail.players.addPlayer("Christian Wood", 35, 5760, 681, 2901, 411);
 
+        nbaLeague.printTeams();
+        nbaLeague.quickSort();
+        System.out.println();
+        System.out.println("Diurutkan Berdasarkan Jumlah Kemenangan");
+        nbaLeague.printTeams();
+
+        nbaLeague.printAllPlayers();
+        System.out.println("Diurutkan Berdasarkan PPG (Points Per Game)");
+        TeamNode current = nbaLeague.head;
+        while(current != null){
+            current.players.mergeSort();
+            current = current.next;
+        }
+        nbaLeague.printAllPlayers();
+
+        PlayerList allPlayers = nbaLeague.getAllPlayers();
+        allPlayers.printPlayers();
+        System.out.println();
+        System.out.println("Semua Pemain Diurutkan Berdasarkan PPG (Points Per Game) Menggunakan Merge Sort");
+        long startTimeMerge = System.nanoTime();
+        PlayerList mergeSorted = allPlayers.mergeSort();
+        long elapsedTimeMerge = System.nanoTime() - startTimeMerge;
+        mergeSorted.printPlayers();
+        System.out.println("Elapsed Time is " + (elapsedTimeMerge / 1000000.0) + " msec");
+        System.out.println();
+        System.out.println("Semua Pemain Diurutkan Berdasarkan PPG (Points Per Game) Menggunakan Quick Sort");
+        long startTimeQuick = System.nanoTime();
+        PlayerList quickSorted = allPlayers.quickSort();
+        long elapsedTimeQuick = System.nanoTime() - startTimeQuick;
+        quickSorted.printPlayers();
+        System.out.println("Elapsed Time is " + (elapsedTimeQuick / 1000000.0) + " msec");
+        System.out.println();
+
+        System.out.println("Mencari Pemain dengan PPG 23.3 Menggunakan Linear Search");
+        long startTimeLinear = System.nanoTime();
+        PlayerNode foundLinear = mergeSorted.linearSearch(23.3);
+        long elapsedTimeLinear = System.nanoTime() - startTimeLinear;
+        if (foundLinear != null) {
+            System.out.println("Ditemukan Pemain: " + foundLinear.stats.name);
+        } else {
+            System.out.println("Pemain dengan PPG 23.3 tidak ditemukan.");
+        }
+        System.out.println("Elapsed Time is " + (elapsedTimeLinear / 1000000.0) + " msec");
+        System.out.println();
+
+        System.out.println("Mencari Pemain dengan PPG 23.3 Menggunakan Binary Search");
+        long startTimeBinary = System.nanoTime();
+        PlayerNode foundBinary = quickSorted.binarySearch(23.3);
+        long elapsedTimeBinary = System.nanoTime() - startTimeBinary;
+        if (foundBinary != null) {
+            System.out.println("Ditemukan Pemain: " + foundBinary.stats.name);
+        } else {
+            System.out.println("Pemain dengan PPG 23.3 tidak ditemukan.");
+        }
+        System.out.println("Elapsed Time is " + (elapsedTimeBinary / 1000000.0) + " msec");
+        System.out.println();
+
+        System.out.println("Mencari Kandidat MVP berdasarkan PPG >= 23.3");
+        PlayerList mvpCandidates = quickSorted.findMVPCandidate(23.3);
+        mvpCandidates.printPlayers();
+
+        // 3 tim
+
         nbaLeague.addTeam("Denver Nuggets", 82, 57, 25, 9420, 3649, 2402);
         nbaLeague.tail.players.addPlayer("Nikola Jokic", 15, 14798, 4774, 7490, 677);
         nbaLeague.tail.players.addPlayer("Jamal Murray", 27, 9229, 2351, 1999, 491);
@@ -60,7 +123,9 @@ public class Main {
         nbaLeague.tail.players.addPlayer("Isaiah Joe", 11, 1404, 219, 401, 202);
         nbaLeague.tail.players.addPlayer("Jaylin Williams", 6, 730, 244, 715, 117);
         nbaLeague.tail.players.addPlayer("Gordon Hayward", 33, 12071, 3037, 3624, 846);
-        nbaLeague.tail.players.addPlayer("Aaron Wiggins", 21, 1092, 198, 476, 200);
+        nbaLeague.tail.players.addPlayer("Aaron Wiggins", 21, 1092, 198, 476, 200);   
+
+        // 5 tim
 
         nbaLeague.addTeam("Milwaukee Bucks", 82, 49, 33, 9760, 3640, 2173);
         nbaLeague.tail.players.addPlayer("Giannis Antetokounmpo", 34, 18596, 3753, 7837, 792);
@@ -121,33 +186,6 @@ public class Main {
         nbaLeague.tail.players.addPlayer("Nikola Jovic", 5, 410, 117, 235, 71);
         nbaLeague.tail.players.addPlayer("Kevin Love", 42, 14755, 2038, 9152, 928);
         nbaLeague.tail.players.addPlayer("Haywood Highsmith", 24, 650, 176, 401, 156);
-
-        nbaLeague.printTeams();
-        nbaLeague.quickSort();
-        System.out.println();
-        System.out.println("Diurutkan Berdasarkan Jumlah Kemenangan");
-        nbaLeague.printTeams();
-
-        nbaLeague.printAllPlayers();
-        System.out.println("Diurutkan Berdasarkan PPG (Points Per Game)");
-        TeamNode current = nbaLeague.head;
-        while(current != null){
-            current.players.mergeSort();
-            current = current.next;
-        }
-        nbaLeague.printAllPlayers();
-
-        PlayerList allPlayers = nbaLeague.getAllPlayers();
-        allPlayers.printPlayers();
-        System.out.println();
-        System.out.println("Semua Pemain Diurutkan Berdasarkan PPG (Points Per Game)");
-        allPlayers.mergeSort();
-        allPlayers.printPlayers();
-        System.out.println("Mencari Kandidat MVP berdasarkan PPG >= 25");
-        PlayerList mvpCandidates = allPlayers.findMVPCandidate(25);
-        mvpCandidates.printPlayers();        
-
-
 
         //10 Tim
 
