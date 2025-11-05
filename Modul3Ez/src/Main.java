@@ -315,8 +315,9 @@ public class Main {
         System.out.println();
 
         System.out.println("Mencari Product dengan nama : \"Jus Jambu Merah\" dengan metode Linear Search");
+        ListProduct linearSearch = list.copyList();
         long startTime = System.nanoTime();
-        list.linearSearch("Jus Jambu Merah");
+        linearSearch.linearSearch("Jus Jambu Merah");
         long endTime = System.nanoTime();
         double waktu = (double)(endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pencarian: %8f detik", waktu);
@@ -324,8 +325,9 @@ public class Main {
         System.out.println();
         
         System.out.println("Mencari Product dengan nama : \"Jus Jambu Merah\" dengan metode Binary Search");
+        ListProduct binarySearch = list.copyList();
         startTime = System.nanoTime();
-        list.binarySearch("Jus Jambu Merah");
+        binarySearch.binarySearch("Jus Jambu Merah");
         endTime = System.nanoTime();
         waktu = (double) (endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pencarian: %8f detik", waktu);
