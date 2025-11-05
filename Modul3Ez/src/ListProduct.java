@@ -43,8 +43,8 @@ public class ListProduct {
         a.rating = rating;
     }
 
-    public int selectionSort(String sortBy, String order) {
-        int counter = 0;
+    public int[] selectionSort(String sortBy, String order) {
+        int counter[] = {0,0};
         for(Product i = this.head; i != null; i = i.next) {
             Product min = i;
             for(Product j = i.next; j != null; j = j.next) {
@@ -77,16 +77,17 @@ public class ListProduct {
                         }
                     }
                 }
+                counter[0]++;
             }
             swap(i, min);
-            counter++;
+            counter[1]++;
         }
         return counter;
     }
 
-    public int bubbleSort(String sortBy, String order) {
+    public int[] bubbleSort(String sortBy, String order) {
         boolean swapped;
-        int counter = 0;
+        int counter[] = {0,0};
         do {
             Product current = this.head;
             swapped = false;
@@ -115,8 +116,9 @@ public class ListProduct {
                 if(swap) {
                     swap(current, current.next);
                     swapped = true;
-                    counter++;
+                    counter[1]++;
                 }
+                counter[0]++;
                 current = current.next;
             }
         }while(swapped);
@@ -163,7 +165,7 @@ public class ListProduct {
             return;
         }
 
-        selectionSort("nama", "asc");
+        // selectionSort("nama", "asc");
 
         Product left = this.head;
         Product right = null;
