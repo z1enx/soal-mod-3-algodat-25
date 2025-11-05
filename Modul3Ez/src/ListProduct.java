@@ -43,7 +43,8 @@ public class ListProduct {
         a.rating = rating;
     }
 
-    public void selectionSort(String sortBy, String order) {
+    public int selectionSort(String sortBy, String order) {
+        int counter = 0;
         for(Product i = this.head; i != null; i = i.next) {
             Product min = i;
             for(Product j = i.next; j != null; j = j.next) {
@@ -78,11 +79,14 @@ public class ListProduct {
                 }
             }
             swap(i, min);
+            counter++;
         }
+        return counter;
     }
 
-    public void bubbleSort(String sortBy, String order) {
+    public int bubbleSort(String sortBy, String order) {
         boolean swapped;
+        int counter = 0;
         do {
             Product current = this.head;
             swapped = false;
@@ -91,7 +95,7 @@ public class ListProduct {
                 boolean swap = false;
                 if(order.equalsIgnoreCase("asc")) {
                     if(sortBy.equalsIgnoreCase("nama")) {
-                        if(current.nama.compareTo(current.next.nama) > 0) swap = true;
+                        if(current.nama.compareTo(current.next.nama) > 0) {swap = true;}
                     } else if(sortBy.equalsIgnoreCase("harga")) {
                         if(current.harga > current.next.harga) swap = true;
                     } else if(sortBy.equalsIgnoreCase("rating")) {
@@ -99,7 +103,7 @@ public class ListProduct {
                     }
                 }else if(order.equalsIgnoreCase("desc")) {
                     if(sortBy.equalsIgnoreCase("nama")) {
-                        if(current.nama.compareTo(current.next.nama) < 0) swap = true;
+                        if(current.nama.compareTo(current.next.nama) < 0) {swap = true;}
                     } else if(sortBy.equalsIgnoreCase("harga")) {
                         if(current.harga < current.next.harga) swap = true;
                     } else if(sortBy.equalsIgnoreCase("rating")) {
@@ -111,10 +115,12 @@ public class ListProduct {
                 if(swap) {
                     swap(current, current.next);
                     swapped = true;
+                    counter++;
                 }
                 current = current.next;
             }
         }while(swapped);
+        return counter;
     }
 
     public void linearSearch(String nama) {
@@ -188,5 +194,15 @@ public class ListProduct {
         }
         System.out.println("Produk tidak ditemukan");
         return;
+    }
+
+    public ListProduct copyList() {
+        ListProduct newList = new ListProduct();
+        Product temp = this.head;
+        while(temp != null) {
+            newList.addProduct(temp.nama, temp.harga, temp.rating);
+            temp = temp.next;
+        }
+        return newList;
     }
 }
