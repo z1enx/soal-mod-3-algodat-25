@@ -1,12 +1,24 @@
 public class TeamList {
     TeamNode head, tail;
 
+    // Counters untuk analisis
+    public int comparisonCount = 0;
+    public int swapCount = 0;
+    public int recursiveCallCount = 0;
+
     public TeamList() {
         this.head = null;
         this.tail = null;
     }
 
-    public void addTeam(String teamName, int gamesPlayed, int wins, int losses, int totalPoints, int totalRebounds, int totalAssists) {
+    public void resetCounters() {
+        comparisonCount = 0;
+        swapCount = 0;
+        recursiveCallCount = 0;
+    }
+
+    public void addTeam(String teamName, int gamesPlayed, int wins, int losses, int totalPoints, int totalRebounds,
+            int totalAssists) {
         TeamNode newTeam = new TeamNode(teamName, gamesPlayed, wins, losses, totalPoints, totalRebounds, totalAssists);
         if (head == null) {
             head = newTeam;
@@ -31,8 +43,8 @@ public class TeamList {
 
     public void printTeams() {
         System.out.println();
-        System.out.printf("%-25s | %-4s | %-4s | %-4s | %-8s | %-8s | %-8s%n", 
-                          "TEAM NAME", "GP", "W", "L", "PPG", "APG", "RPG");
+        System.out.printf("%-25s | %-4s | %-4s | %-4s | %-8s | %-8s | %-8s%n",
+                "TEAM NAME", "GP", "W", "L", "PPG", "APG", "RPG");
         System.out.println("----------------------------------------------------------------------------------");
 
         TeamNode current = head;
@@ -62,7 +74,7 @@ public class TeamList {
 
     public PlayerList getAllPlayers() {
         PlayerList allPlayers = new PlayerList();
-        
+
         TeamNode currentTeam = this.head;
 
         while (currentTeam != null) {
@@ -70,31 +82,34 @@ public class TeamList {
 
             while (currentPlayer != null) {
                 allPlayers.addPlayer(
-                    currentPlayer.stats.name,
-                    currentPlayer.stats.jerseyNumber,
-                    currentPlayer.stats.totalPoints,
-                    currentPlayer.stats.totalAssists,
-                    currentPlayer.stats.totalRebounds,
-                    currentPlayer.stats.gamesPlayed
-                );
+                        currentPlayer.stats.name,
+                        currentPlayer.stats.jerseyNumber,
+                        currentPlayer.stats.totalPoints,
+                        currentPlayer.stats.totalAssists,
+                        currentPlayer.stats.totalRebounds,
+                        currentPlayer.stats.gamesPlayed);
                 currentPlayer = currentPlayer.next;
             }
             currentTeam = currentTeam.next;
         }
-        
-    return allPlayers;
+
+        return allPlayers;
     }
 
     public void quickSort() {
+        resetCounters();
         head = quickSortRec(head, tail);
-        
+
         TeamNode temp = head;
         while (temp != null && temp.next != null) {
             temp = temp.next;
         }
         tail = temp;
     }
+
     private TeamNode quickSortRec(TeamNode left, TeamNode right) {
+        recursiveCallCount++;
+
         if (left == null || right == null || left == right || left.prev == right) {
             return left;
         }
@@ -107,30 +122,36 @@ public class TeamList {
         }
         return left;
     }
+
     private TeamNode partition(TeamNode left, TeamNode right) {
         int pivotValue = right.data.wins;
         TeamNode i = left.prev;
 
         for (TeamNode j = left; j != right; j = j.next) {
+            comparisonCount++;
             if (j.data.wins >= pivotValue) {
                 i = (i == null) ? left : i.next;
                 swapData(i, j);
             }
         }
-        
+
         i = (i == null) ? left : i.next;
         swapData(i, right);
-        
+
         return i;
     }
+
     private void swapData(TeamNode a, TeamNode b) {
-        TeamData tempData = a.data;
-        PlayerList tempPlayers = a.players;
+        if (a != b) { // Hanya swap jika berbeda node
+            swapCount++;
+            TeamData tempData = a.data;
+            PlayerList tempPlayers = a.players;
 
-        a.data = b.data;
-        a.players = b.players;
+            a.data = b.data;
+            a.players = b.players;
 
-        b.data = tempData;
-        b.players = tempPlayers;
+            b.data = tempData;
+            b.players = tempPlayers;
+        }
     }
 }
