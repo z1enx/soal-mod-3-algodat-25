@@ -260,8 +260,6 @@ public class ListDokter {
         System.out.println("Jumlah pertukaran: " + swaps);
     }
 
-    // ==================== INSERTION SORT (DIPERBAIKI) ====================
-// ==================== INSERTION SORT (DIPERBAIKI) ====================
 
 // 3. Insertion Sort - Pasien by Umur (Ascending)
 public void insertionSortPasienByUmur(String nama_dokter) {
@@ -303,7 +301,6 @@ public void insertionSortPasienByUmur(String nama_dokter) {
         return;
     }
 
-    // Reset comparisons untuk proses sorting sebenarnya
     comparisons = 0;
     
     Pasien sorted = null;
@@ -314,8 +311,7 @@ public void insertionSortPasienByUmur(String nama_dokter) {
         moves++; // Setiap node pasti dipindahkan dari list asli ke sorted
 
         if (sorted == null || current.umur < sorted.umur) {
-            comparisons++; // Perbandingan dengan head sorted atau sorted kosong
-            // Insert di awal
+            comparisons++; 
             current.next = sorted;
             current.prev = null;
             if (sorted != null) {
@@ -323,12 +319,11 @@ public void insertionSortPasienByUmur(String nama_dokter) {
             }
             sorted = current;
         } else {
-            // Cari posisi yang tepat
             Pasien temp = sorted;
             boolean found = false;
             
             while (temp.next != null) {
-                comparisons++; // Perbandingan di setiap iterasi
+                comparisons++;
                 if (temp.next.umur >= current.umur) {
                     found = true;
                     break;
@@ -337,7 +332,7 @@ public void insertionSortPasienByUmur(String nama_dokter) {
             }
             
             if (!found && temp.next == null) {
-                comparisons++; // Perbandingan terakhir jika sampai akhir
+                comparisons++;
             }
 
             // Insert setelah temp
@@ -389,10 +384,9 @@ public void insertionSortPasienByNama(String nama_dokter) {
     int moves = 0;
     boolean alreadySorted = true;
     
-    // Cek apakah data sudah terurut
     Pasien checkCurrent = dokter.pasien.head;
     while (checkCurrent != null && checkCurrent.next != null) {
-        comparisons++; // Hitung comparison untuk pengecekan
+        comparisons++; 
         if (checkCurrent.nama_pasien.compareTo(checkCurrent.next.nama_pasien) > 0) {
             alreadySorted = false;
             break;
@@ -408,7 +402,6 @@ public void insertionSortPasienByNama(String nama_dokter) {
         return;
     }
 
-    // Reset comparisons untuk proses sorting sebenarnya
     comparisons = 0;
     
     Pasien sorted = null;
@@ -416,11 +409,10 @@ public void insertionSortPasienByNama(String nama_dokter) {
 
     while (current != null) {
         Pasien next = current.next;
-        moves++; // Setiap node pasti dipindahkan
+        moves++; 
 
         if (sorted == null || current.nama_pasien.compareTo(sorted.nama_pasien) < 0) {
-            comparisons++; // Perbandingan dengan head sorted atau sorted kosong
-            // Insert di awal
+            comparisons++; 
             current.next = sorted;
             current.prev = null;
             if (sorted != null) {
@@ -428,12 +420,11 @@ public void insertionSortPasienByNama(String nama_dokter) {
             }
             sorted = current;
         } else {
-            // Cari posisi yang tepat
             Pasien temp = sorted;
             boolean found = false;
             
             while (temp.next != null) {
-                comparisons++; // Perbandingan di setiap iterasi
+                comparisons++;
                 if (temp.next.nama_pasien.compareTo(current.nama_pasien) >= 0) {
                     found = true;
                     break;
@@ -442,10 +433,9 @@ public void insertionSortPasienByNama(String nama_dokter) {
             }
             
             if (!found && temp.next == null) {
-                comparisons++; // Perbandingan terakhir jika sampai akhir
+                comparisons++; 
             }
 
-            // Insert setelah temp
             current.next = temp.next;
             current.prev = temp;
             if (temp.next != null) {
@@ -512,7 +502,6 @@ public void insertionSortPasienBySistolik(String nama_dokter) {
         return;
     }
 
-    // Reset comparisons untuk proses sorting sebenarnya
     comparisons = 0;
     
     Pasien sorted = null;
@@ -520,11 +509,10 @@ public void insertionSortPasienBySistolik(String nama_dokter) {
 
     while (current != null) {
         Pasien next = current.next;
-        moves++; // Setiap node pasti dipindahkan
+        moves++; 
 
         if (sorted == null || current.sistolik < sorted.sistolik) {
-            comparisons++; // Perbandingan dengan head sorted atau sorted kosong
-            // Insert di awal
+            comparisons++; 
             current.next = sorted;
             current.prev = null;
             if (sorted != null) {
@@ -537,7 +525,7 @@ public void insertionSortPasienBySistolik(String nama_dokter) {
             boolean found = false;
             
             while (temp.next != null) {
-                comparisons++; // Perbandingan di setiap iterasi
+                comparisons++; 
                 if (temp.next.sistolik >= current.sistolik) {
                     found = true;
                     break;
@@ -546,10 +534,9 @@ public void insertionSortPasienBySistolik(String nama_dokter) {
             }
             
             if (!found && temp.next == null) {
-                comparisons++; // Perbandingan terakhir jika sampai akhir
+                comparisons++; 
             }
 
-            // Insert setelah temp
             current.next = temp.next;
             current.prev = temp;
             if (temp.next != null) {
@@ -576,7 +563,6 @@ public void insertionSortPasienBySistolik(String nama_dokter) {
     System.out.println("Jumlah pemindahan: " + moves);
 }
 
-    // ==================== LINEAR SEARCH ====================
 
     // 6. Linear Search - Pasien by Umur
     public void linearSearchPasienByUmur(String nama_dokter, int umur) {
@@ -781,7 +767,6 @@ public void insertionSortPasienBySistolik(String nama_dokter) {
         Pasien slow = left;
         Pasien fast = left;
 
-        // Gunakan teknik two pointers untuk menemukan middle
         while (fast != right && fast.next != right) {
             if (fast.next == null) {
                 break;
@@ -805,4 +790,5 @@ public void insertionSortPasienBySistolik(String nama_dokter) {
         }
         return null;
     }
+
 }
