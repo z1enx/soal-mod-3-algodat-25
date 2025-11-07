@@ -41,14 +41,15 @@ public class Main {
         nbaLeague.printTeams();
         nbaLeague.quickSort();
         System.out.println();
-        System.out.println("Diurutkan Berdasarkan Jumlah Kemenangan");
+        System.out.println("Diurutkan Berdasarkan Jumlah Kemenangan (Quick Sort)");
         nbaLeague.printTeams();
 
         nbaLeague.printAllPlayers();
-        System.out.println("Diurutkan Berdasarkan PPG (Points Per Game)");
+        System.out.println("Diurutkan Berdasarkan PPG (Points Per Game) - Merge Sort per Tim");
         TeamNode current = nbaLeague.head;
-        while(current != null){
-            current.players.mergeSort();
+        while (current != null) {
+            PlayerList sorted = current.players.mergeSort();
+            current.players = sorted;
             current = current.next;
         }
         nbaLeague.printAllPlayers();
@@ -62,6 +63,7 @@ public class Main {
         long elapsedTimeMerge = System.nanoTime() - startTimeMerge;
         mergeSorted.printPlayers();
         System.out.println("Elapsed Time is " + (elapsedTimeMerge / 1000000.0) + " msec");
+
         System.out.println();
         System.out.println("Semua Pemain Diurutkan Berdasarkan PPG (Points Per Game) Menggunakan Quick Sort");
         long startTimeQuick = System.nanoTime();
@@ -69,12 +71,15 @@ public class Main {
         long elapsedTimeQuick = System.nanoTime() - startTimeQuick;
         quickSorted.printPlayers();
         System.out.println("Elapsed Time is " + (elapsedTimeQuick / 1000000.0) + " msec");
-        System.out.println();
+
+        // Gunakan data acak (belum terurut) untuk searching
+        PlayerList randomData = nbaLeague.getAllPlayers();
 
         System.out.println("Mencari Pemain dengan PPG 23.3 Menggunakan Linear Search");
         long startTimeLinear = System.nanoTime();
-        PlayerNode foundLinear = mergeSorted.linearSearch(23.3);
+        PlayerNode foundLinear = randomData.linearSearch(23.3);
         long elapsedTimeLinear = System.nanoTime() - startTimeLinear;
+        int linearComparisons = randomData.comparisonCount; // Simpan counter linear search
         if (foundLinear != null) {
             System.out.println("Ditemukan Pemain: " + foundLinear.stats.name);
         } else {
@@ -85,8 +90,17 @@ public class Main {
 
         System.out.println("Mencari Pemain dengan PPG 23.3 Menggunakan Binary Search");
         long startTimeBinary = System.nanoTime();
-        PlayerNode foundBinary = quickSorted.binarySearch(23.3);
+        // Binary search butuh data terurut, jadi sort dulu
+        PlayerList sortedForBinary = randomData.quickSort();
+        int sortComparisons = sortedForBinary.comparisonCount; // Simpan jumlah perbandingan dari sorting
+        int sortSwaps = sortedForBinary.swapCount;
+        int sortRecursive = sortedForBinary.recursiveCallCount;
+
+        // Lakukan binary search
+        PlayerNode foundBinary = sortedForBinary.binarySearch(23.3);
         long elapsedTimeBinary = System.nanoTime() - startTimeBinary;
+        int binaryComparisons = sortedForBinary.comparisonCount; // Counter binary search
+
         if (foundBinary != null) {
             System.out.println("Ditemukan Pemain: " + foundBinary.stats.name);
         } else {
@@ -98,6 +112,43 @@ public class Main {
         System.out.println("Mencari Kandidat MVP berdasarkan PPG >= 23.3");
         PlayerList mvpCandidates = quickSorted.findMVPCandidate(23.3);
         mvpCandidates.printPlayers();
+
+        System.out.println();
+        System.out.println("===================================================");
+        System.out.println("               ANALISIS KOMPLEKSITAS");
+        System.out.println("===================================================");
+        System.out.println();
+        System.out.println("PERBANDINGAN SORTING:");
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("Merge Sort:");
+        System.out.println("  - Waktu eksekusi: " + (elapsedTimeMerge / 1000000.0) + " msec");
+        System.out.println("  - Recursive Call: " + mergeSorted.recursiveCallCount);
+        System.out.println("  - Perbandingan: " + mergeSorted.comparisonCount);
+        System.out.println("  - Pertukaran: Tidak dihitung (merge tidak swap)");
+        System.out.println();
+        System.out.println("Quick Sort:");
+        System.out.println("  - Waktu eksekusi: " + (elapsedTimeQuick / 1000000.0) + " msec");
+        System.out.println("  - Recursive Call: " + quickSorted.recursiveCallCount);
+        System.out.println("  - Perbandingan: " + quickSorted.comparisonCount);
+        System.out.println("  - Pertukaran: " + quickSorted.swapCount);
+        System.out.println();
+        System.out.println("PERBANDINGAN SEARCHING:");
+        System.out.println("-------------------------------------------------------------");
+        System.out.println("Linear Search (pada data acak):");
+        System.out.println("  - Waktu eksekusi: " + (elapsedTimeLinear / 1000000.0) + " msec");
+        System.out.println("  - Perbandingan: " + linearComparisons);
+        System.out.println();
+        System.out.println("Binary Search (termasuk waktu sorting data acak):");
+        System.out.println("  - Waktu eksekusi total: " + (elapsedTimeBinary / 1000000.0) + " msec");
+        System.out.println("  - Recursive Call saat Sorting: " + sortRecursive);
+        System.out.println("  - Perbandingan saat Sorting: " + sortComparisons);
+        System.out.println("  - Pertukaran saat Sorting: " + sortSwaps);
+        System.out.println("  - Perbandingan saat Searching: " + binaryComparisons);
+        System.out.println();
+        System.out.println("Catatan: Binary search membutuhkan data terurut,");
+        System.out.println("         sehingga waktu dan operasi sorting termasuk dalam analisis.");
+        System.out.println("=============================================================");
+        System.out.println();
 
         // 3 tim
 
@@ -123,7 +174,7 @@ public class Main {
         nbaLeague.tail.players.addPlayer("Isaiah Joe", 11, 1404, 219, 401, 202);
         nbaLeague.tail.players.addPlayer("Jaylin Williams", 6, 730, 244, 715, 117);
         nbaLeague.tail.players.addPlayer("Gordon Hayward", 33, 12071, 3037, 3624, 846);
-        nbaLeague.tail.players.addPlayer("Aaron Wiggins", 21, 1092, 198, 476, 200);   
+        nbaLeague.tail.players.addPlayer("Aaron Wiggins", 21, 1092, 198, 476, 200);
 
         // 5 tim
 
@@ -187,7 +238,7 @@ public class Main {
         nbaLeague.tail.players.addPlayer("Kevin Love", 42, 14755, 2038, 9152, 928);
         nbaLeague.tail.players.addPlayer("Haywood Highsmith", 24, 650, 176, 401, 156);
 
-        //10 Tim
+        // 10 Tim
 
         nbaLeague.addTeam("New York Knicks", 82, 50, 32, 9250, 3715, 2017);
         nbaLeague.tail.players.addPlayer("Jalen Brunson", 11, 7965, 2736, 1756, 453);
@@ -432,13 +483,6 @@ public class Main {
         nbaLeague.tail.players.addPlayer("Luka Samanic", 19, 521, 80, 312, 80);
 
         // 30 Tim
-
-
-
-
-
-
-        
 
     }
 }

@@ -2,9 +2,20 @@ public class PlayerList {
     PlayerNode head;
     PlayerNode tail;
 
+    // Counters untuk analisis
+    public int comparisonCount = 0;
+    public int swapCount = 0;
+    public int recursiveCallCount = 0;
+
     public PlayerList() {
         head = null;
         tail = null;
+    }
+
+    public void resetCounters() {
+        comparisonCount = 0;
+        swapCount = 0;
+        recursiveCallCount = 0;
     }
 
     public void addPlayer(String name, int jerseyNumber, int totalPoints, int totalAssists, int totalRebounds,
@@ -57,6 +68,7 @@ public class PlayerList {
             return copy;
         }
 
+        copy.resetCounters();
         copy.head = copy.mergeSortRec(copy.head);
 
         PlayerNode current = copy.head;
@@ -71,6 +83,8 @@ public class PlayerList {
     }
 
     private PlayerNode mergeSortRec(PlayerNode node) {
+        recursiveCallCount++;
+
         if (node == null || node.next == null) {
             return node;
         }
@@ -94,6 +108,7 @@ public class PlayerList {
             return a;
         PlayerNode result;
 
+        comparisonCount++;
         if (a.getPPG() >= b.getPPG()) {
             result = a;
             result.next = thisMerge(a.next, b);
@@ -124,6 +139,7 @@ public class PlayerList {
 
     public PlayerList quickSort() {
         PlayerList copy = this.deepCopy();
+        copy.resetCounters();
         copy.quickSortRec(copy.head, copy.tail);
         PlayerNode current = copy.head, prev = null;
         while (current != null) {
@@ -136,6 +152,8 @@ public class PlayerList {
     }
 
     private void quickSortRec(PlayerNode low, PlayerNode high) {
+        recursiveCallCount++;
+
         if (high != null && low != high && low != high.next) {
             PlayerNode pivot = partition(low, high);
             quickSortRec(low, pivot.prev);
@@ -148,6 +166,7 @@ public class PlayerList {
         PlayerNode i = low.prev;
 
         for (PlayerNode j = low; j != high; j = j.next) {
+            comparisonCount++;
             if (j.getPPG() >= pivotValue) {
                 i = (i == null) ? low : i.next;
                 swapData(i, j);
@@ -159,14 +178,19 @@ public class PlayerList {
     }
 
     private void swapData(PlayerNode a, PlayerNode b) {
-        PlayerStats tempStats = a.stats;
-        a.stats = b.stats;
-        b.stats = tempStats;
+        if (a != b) { // Hanya swap jika berbeda node
+            swapCount++;
+            PlayerStats tempStats = a.stats;
+            a.stats = b.stats;
+            b.stats = tempStats;
+        }
     }
 
     public PlayerNode linearSearch(double ppg) {
+        resetCounters();
         PlayerNode current = this.head;
         while (current != null) {
+            comparisonCount++;
             if (current.getPPG() == ppg) {
                 return current;
             }
@@ -176,6 +200,7 @@ public class PlayerList {
     }
 
     public PlayerNode binarySearch(double ppg) {
+        resetCounters();
         PlayerNode low = head;
         PlayerNode high = tail;
 
@@ -213,6 +238,7 @@ public class PlayerList {
                 break;
 
             double midPPG = mid.getPPG();
+            comparisonCount++;
             if (midPPG == targetPPG) {
                 return mid; // exact match
             } else if (midPPG < targetPPG) {
