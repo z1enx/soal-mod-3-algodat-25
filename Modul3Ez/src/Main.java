@@ -314,9 +314,16 @@ public class Main {
         list.display();
         System.out.println();
 
+        int[] perbandinganPertukaran = {0,0};
+
+        System.out.println("=====================");
+        System.out.println("SEARCHING");
+        System.out.println("=====================");
+
         System.out.println("Mencari Product dengan nama : \"Jus Jambu Merah\" dengan metode Linear Search");
+        ListProduct linearSearch = list.copyList();
         long startTime = System.nanoTime();
-        list.linearSearch("Jus Jambu Merah");
+        linearSearch.linearSearch("Jus Jambu Merah");
         long endTime = System.nanoTime();
         double waktu = (double)(endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pencarian: %8f detik", waktu);
@@ -324,18 +331,28 @@ public class Main {
         System.out.println();
         
         System.out.println("Mencari Product dengan nama : \"Jus Jambu Merah\" dengan metode Binary Search");
+        ListProduct binarySearch = list.copyList();
         startTime = System.nanoTime();
-        list.binarySearch("Jus Jambu Merah");
+        binarySearch.selectionSort("nama", "asc");
+        binarySearch.binarySearch("Jus Jambu Merah");
         endTime = System.nanoTime();
         waktu = (double) (endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pencarian: %8f detik", waktu);
         System.out.println();
         System.out.println();
 
+        System.out.println("=====================");
+        System.out.println("BUBBLE ASC SORT");
+        System.out.println("=====================");
+
+
         System.out.println("Mengurutkan Product berdasarkan harga secara Ascending dengan metode Bubble Sort");
+        ListProduct bubbleAscHarga = list.copyList(); 
         startTime = System.nanoTime();
-        list.bubbleSort("harga", "asc");
+        perbandinganPertukaran = bubbleAscHarga.bubbleSort("harga", "asc");
         endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
         // list.display();
         waktu = (double) (endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pengurutan: %8f detik", waktu);
@@ -343,29 +360,128 @@ public class Main {
         System.out.println();
 
         System.out.println("Mengurutkan Product berdasarkan nama secara Ascending dengan metode Bubble Sort");
+        ListProduct bubbleAscNama = list.copyList();
         startTime = System.nanoTime();
-        list.bubbleSort("nama", "asc");
+        perbandinganPertukaran = bubbleAscNama.bubbleSort("nama", "asc");
         endTime = System.nanoTime();
-        // list.display();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
+        // bubbleAscNama.display();
         waktu = (double) (endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pengurutan: %8f detik", waktu);
         System.out.println();
         System.out.println();
         
         System.out.println("Mengurutkan Product berdasarkan rating secara Ascending dengan metode Bubble Sort");
+        ListProduct bubbleAscRating = list.copyList();
         startTime = System.nanoTime();
-        list.bubbleSort("rating", "asc");
+        perbandinganPertukaran = bubbleAscRating.bubbleSort("rating", "asc");
         endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
+        // list.display();
+        waktu = (double) (endTime - startTime)/1000000000.0;
+        System.out.printf("Waktu pengurutan: %8f detik", waktu);
+        System.out.println();
+        System.out.println();
+
+        System.out.println("=====================");
+        System.out.println("SELECTION ASC SORT");
+        System.out.println("=====================");
+        
+        System.out.println("Mengurutkan Product berdasarkan harga secara Ascending dengan metode Selection Sort");
+        ListProduct selectionAscHarga = list.copyList();
+        startTime = System.nanoTime();
+        perbandinganPertukaran = selectionAscHarga.selectionSort("harga", "asc");
+        endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
         // list.display();
         waktu = (double) (endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pengurutan: %8f detik", waktu);
         System.out.println();
         System.out.println();
         
-        System.out.println("Mengurutkan Product berdasarkan harga secara Descending dengan metode Selection Sort");
+        System.out.println("Mengurutkan Product berdasarkan nama secara Ascending dengan metode Selection Sort");
+        ListProduct selectionAscNama = list.copyList();
         startTime = System.nanoTime();
-        list.selectionSort("harga", "desc");
+        perbandinganPertukaran = selectionAscNama.selectionSort("nama", "asc");
         endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
+        // list.display();
+        waktu = (double) (endTime - startTime)/1000000000.0;
+        System.out.printf("Waktu pengurutan: %8f detik", waktu);
+        System.out.println();
+        System.out.println();
+
+        System.out.println("Mengurutkan Product berdasarkan rating secara Ascending dengan metode Selection Sort");
+        ListProduct selectionAscRating = list.copyList();
+        startTime = System.nanoTime();
+        perbandinganPertukaran = selectionAscRating.selectionSort("rating", "asc");
+        endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
+        // list.display();
+        waktu = (double) (endTime - startTime)/1000000000.0;
+        System.out.printf("Waktu pengurutan: %8f detik", waktu);
+        System.out.println();
+        System.out.println();
+
+        System.out.println("=====================");
+        System.out.println("BUBBLE DESC SORT");
+        System.out.println("=====================");
+
+        System.out.println("Mengurutkan Product berdasarkan harga secara Descending dengan metode Bubble Sort");
+        ListProduct bubbleDescHarga = list.copyList();
+        startTime = System.nanoTime();
+        perbandinganPertukaran = bubbleDescHarga.bubbleSort("harga", "desc");
+        endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
+        // list.display();
+        waktu = (double) (endTime - startTime)/1000000000.0;
+        System.out.printf("Waktu pengurutan: %8f detik", waktu);
+        System.out.println();
+        System.out.println();
+
+        System.out.println("Mengurutkan Product berdasarkan nama secara Descending dengan metode Bubble Sort");
+        ListProduct bubbleDescNama = list.copyList();
+        startTime = System.nanoTime();
+        perbandinganPertukaran = bubbleDescNama.bubbleSort("nama", "desc");
+        endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
+        // list.display();
+        waktu = (double) (endTime - startTime)/1000000000.0;
+        System.out.printf("Waktu pengurutan: %8f detik", waktu);
+        System.out.println();
+        System.out.println();
+        
+        System.out.println("Mengurutkan Product berdasarkan rating secara Descending dengan metode Bubble Sort");
+        ListProduct bubbleDescRating = list.copyList();
+        startTime = System.nanoTime();
+        perbandinganPertukaran = bubbleDescRating.bubbleSort("rating", "desc");
+        endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
+        // list.display();
+        waktu = (double) (endTime - startTime)/1000000000.0;
+        System.out.printf("Waktu pengurutan: %8f detik", waktu);
+        System.out.println();
+        System.out.println();
+
+        System.out.println("=====================");
+        System.out.println("SELECTION DESC SORT");
+        System.out.println("=====================");
+        
+        System.out.println("Mengurutkan Product berdasarkan harga secara Descending dengan metode Selection Sort");
+        ListProduct selectionDescHarga = list.copyList();
+        startTime = System.nanoTime();
+        perbandinganPertukaran = selectionDescHarga.selectionSort("harga", "desc");
+        endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
         // list.display();
         waktu = (double) (endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pengurutan: %8f detik", waktu);
@@ -373,9 +489,12 @@ public class Main {
         System.out.println();
         
         System.out.println("Mengurutkan Product berdasarkan nama secara Descending dengan metode Selection Sort");
+        ListProduct selectionDescNama = list.copyList();
         startTime = System.nanoTime();
-        list.selectionSort("nama", "desc");
+        perbandinganPertukaran = selectionDescNama.selectionSort("nama", "desc");
         endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
         // list.display();
         waktu = (double) (endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pengurutan: %8f detik", waktu);
@@ -383,9 +502,12 @@ public class Main {
         System.out.println();
 
         System.out.println("Mengurutkan Product berdasarkan rating secara Descending dengan metode Selection Sort");
+        ListProduct selectionDescRating = list.copyList();
         startTime = System.nanoTime();
-        list.selectionSort("rating", "desc");
+        perbandinganPertukaran = selectionDescRating.selectionSort("rating", "desc");
         endTime = System.nanoTime();
+        System.out.println("Jumlah perbandingan data: " + perbandinganPertukaran[0]);
+        System.out.println("Jumlah pertukaran data: " + perbandinganPertukaran[1]);
         // list.display();
         waktu = (double) (endTime - startTime)/1000000000.0;
         System.out.printf("Waktu pengurutan: %8f detik", waktu);
